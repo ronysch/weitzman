@@ -1,0 +1,74 @@
+package fractalsWeitzman;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Canvas;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+
+public class MainApp {
+
+	private JFrame frame;
+	private final Action action = new SwingAction();
+	private JButton btnH;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainApp window = new MainApp();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public MainApp() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
+		frame.getContentPane().add(internalFrame, BorderLayout.CENTER);
+		
+		JButton btnH = new JButton("h");
+		btnH.setAction(action);
+		btnH.setBounds(184, 61, 75, 55);
+		
+		internalFrame.getContentPane().setLayout(null);
+		internalFrame.getContentPane().add(btnH);
+		internalFrame.setVisible(true);
+	}
+
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			btnH.setText("rony");
+		}
+	}
+}

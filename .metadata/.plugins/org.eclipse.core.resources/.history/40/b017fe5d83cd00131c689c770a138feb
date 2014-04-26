@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author yael
+ *
+ */
+public class Substracting extends Action {
+
+}

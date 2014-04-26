@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author yael
+ *
+ */
+public class Adding extends Action {
+
+}
