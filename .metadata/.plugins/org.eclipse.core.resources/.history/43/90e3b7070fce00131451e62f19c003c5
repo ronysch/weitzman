@@ -1,0 +1,16 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class Sinus extends Action {
+	public Complex perform(Complex c1) {
+		return c1.sin();//the sin method returns new complex obj, so the original params didnt changed
+		
+	}
+
+}

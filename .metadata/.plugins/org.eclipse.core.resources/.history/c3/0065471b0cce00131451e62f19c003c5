@@ -1,0 +1,40 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class Parser {
+	private static int index=0;
+	
+	public static ParsingTree createTree(String eqt){
+		ParsingTree tree=new ParsingTree();
+		return tree;
+		
+	}
+
+	private static void firstLevel(ParsingTree tree,String eqt){
+		int first=index;
+		while(index<eqt.length()&& eqt.charAt(index)<58 && eqt.charAt(index)>47 && eqt.charAt(index)==46){
+			index++;	
+		}
+		if(index==eqt.length()){
+			tree.setAction(null);
+			if((index-first)==1 && eqt.charAt(first)=='z')
+				tree.setVal(false);
+			else{
+				tree.setVal(true);
+			tree.setRightVal(Double.parseDouble(eqt.substring(first, index-1)));
+			}
+		}
+		else
+		if(eqt.charAt(index)==95||eqt.charAt(index)==43)
+			if(eqt.charAt(index)==95){
+				index++;
+				firstLevel(tree.getRight(),eqt);
+			}
+	}
+}

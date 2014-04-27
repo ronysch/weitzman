@@ -1,0 +1,17 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class test {
+	public static void main(String[] args) {
+		String st="5";
+		if(st.charAt(0)==53)
+			System.out.println(st);
+	}
+
+}

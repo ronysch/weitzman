@@ -41,6 +41,11 @@ public class Complex {
         re = real;
         im = imag;
     }
+    //create a new ocject without imagenary part
+    public Complex(double real) {
+        re = real;
+        im = 0.0;
+    }
 
     /**
 	 * @param complex

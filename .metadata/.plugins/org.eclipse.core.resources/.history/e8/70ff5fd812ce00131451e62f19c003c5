@@ -1,0 +1,285 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class Parser {
+	private static int index=0;
+	
+	public static ParsingTree createTree(String eqt){
+		ParsingTree tree=new ParsingTree();
+		firstLevel(tree, eqt);
+		return tree;
+		
+	}
+
+	private static void firstLevel(ParsingTree tree,String eqt){
+		int first=index;
+		while(index<eqt.length()&& eqt.charAt(index)<58 && eqt.charAt(index)>47 && eqt.charAt(index)==46 &&eqt.charAt(index)=='z' ){
+			index++;	
+		}
+		/*
+		 * checks if the index is the end of the string
+		 */
+		if(index==eqt.length()){
+			tree.setAction(null);
+			if(index==eqt.length() && eqt.charAt(first)=='z')
+				tree.setVal(false);
+			else{
+				tree.setVal(true);
+			tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+			}
+		}
+		/*
+		 * checks if the next operator is + or -
+		 */
+		else
+			if(eqt.charAt(index)==95||eqt.charAt(index)==43){ 
+				ParsingTree temp=new ParsingTree();
+				temp.setAction(null);
+				tree.setRight(temp);
+				if(eqt.charAt(index)==95){ //minus
+					tree.setAction(new Substracting());
+					if(eqt.charAt(first)=='z')
+						tree.setVal(false);
+					else{
+						tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+						tree.setVal(true);
+					}
+					index++;
+					firstLevel(tree.getRight(),eqt);
+				}
+				else{ //plus
+					tree.setAction(new Adding());
+					if( eqt.charAt(first)=='z')
+						tree.setVal(false);
+					else{
+						tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+						tree.setVal(true);
+					}
+					index++;
+					firstLevel(tree.getRight(),eqt);
+					
+				}
+			}
+		/*
+		 * the treatment that * | / | sin | cos | ^ is the same
+		 */
+			else{
+				ParsingTree temp=new ParsingTree();
+				temp.setAction(new Adding());
+				tree.setRight(temp);
+				index=first;
+				tree.setAction(new Adding()); 
+				ParsingTree son=new ParsingTree();
+				tree.setLeft(son);
+				secondLevel(son,eqt);
+				if(index==eqt.length()){
+					
+					temp.setLeftVal(0.2);
+					tree.setRight(temp);
+				}
+				else
+					firstLevel(tree.getRight(),eqt);
+			}
+	}
+
+	/**
+	 * @param tree
+	 * @param eqt
+	 */
+	private static void secondLevel(ParsingTree tree, String eqt) {
+		int first=index;
+		while(index<eqt.length()&& eqt.charAt(index)<58 && eqt.charAt(index)>47 && eqt.charAt(index)==46 &&eqt.charAt(index)=='z' ){
+			index++;	
+		}
+		/*
+		 * checks if the index is the end of the string
+		 */
+		if(index==eqt.length()){
+			tree.setAction(null);
+			if(index==eqt.length() && eqt.charAt(first)=='z')
+				tree.setVal(false);
+			else{
+				tree.setVal(true);
+			tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+			}
+		}
+		/*
+		 * checks if the next operator is + or -
+		 */
+		else
+			if(eqt.charAt(index)==95||eqt.charAt(index)==43){ 
+				index++;
+				tree.setAction(null);
+				if( eqt.charAt(first)=='z')
+					tree.setVal(false);
+				else{
+					tree.setVal(true);
+				tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+				}
+			}
+		/*
+		 * checks if the next operator is * or /
+		 */
+			else{
+				if(eqt.charAt(index)=='*'||eqt.charAt(index)=='/'){
+					ParsingTree temp=new ParsingTree();
+					temp.setAction(null);
+					tree.setRight(temp);
+					if(eqt.charAt(index)=='*'){ // multiplying
+						tree.setAction(new Multiplying());
+						if(eqt.charAt(first)=='z')
+							tree.setVal(false);
+						else{
+							tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+							tree.setVal(true);
+						}
+						index++;
+						secondLevel(tree.getRight(),eqt);
+					}
+					else{ // division
+						tree.setAction(new Dividing());
+						if( eqt.charAt(first)=='z')
+							tree.setVal(false);
+						else{
+							tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+							tree.setVal(true);
+						}
+						index++;
+						secondLevel(tree.getRight(),eqt);
+					
+					}
+				}
+		/*
+		 * the treatment that  sin | cos | ^ is the same
+		 */
+				else{
+					ParsingTree temp=new ParsingTree();
+					temp.setAction(null);
+					tree.setRight(temp);
+					index=first;
+					tree.setAction(new Multiplying()); 
+					ParsingTree son=new ParsingTree();
+					tree.setLeft(son);
+					thirdLevel(son,eqt);
+					if(index==eqt.length()){
+						
+						temp.setLeftVal(1.0);
+						tree.setRight(temp);
+					}
+					else
+						if(index>0){
+						if( eqt.charAt(index-1)=='+'||eqt.charAt(index-1)=='-'){
+							temp.setLeftVal(1.0);
+							tree.setRight(temp);
+						}
+						else
+						secondLevel(tree.getRight(),eqt);
+						}
+				}
+			}
+		
+		
+	}
+
+	/**
+	 * @param tree
+	 * @param eqt
+	 */
+	private static void thirdLevel(ParsingTree tree, String eqt) {
+		int first=index;
+		while(index<eqt.length()&& eqt.charAt(index)<58 && eqt.charAt(index)>47 && eqt.charAt(index)==46 &&eqt.charAt(index)=='z' ){
+			index++;	
+		}
+		/*
+		 * checks if the index is the end of the string
+		 */
+		if(index==eqt.length()){
+			tree.setAction(null);
+			if(index==eqt.length() && eqt.charAt(first)=='z')
+				tree.setVal(false);
+			else{
+				tree.setVal(true);
+			tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+			}
+		}
+		else
+		/*
+		 * checks if the next operator is + or -
+		 */
+			if(eqt.charAt(index)==95||eqt.charAt(index)==43){ 
+				tree.setAction(null);
+				index++;
+				if( eqt.charAt(first)=='z')
+					tree.setVal(false);
+				else{
+					tree.setVal(true);
+				tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+				}
+			}
+		/*
+		 * checks if the next operator is * or /
+		 */
+			else 
+				if(eqt.charAt(index)=='*'||eqt.charAt(index)=='/'){
+					index++;
+					tree.setAction(null);
+					if( eqt.charAt(first)=='z')
+						tree.setVal(false);
+					else{
+						tree.setVal(true);
+					tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+					}
+				}
+		/*
+		 * the treatment that  sin | cos | ^ is the same
+		 */
+				else
+					if(eqt.charAt(index)=='s'||eqt.charAt(index)=='c'||eqt.charAt(index)=='^'){
+						ParsingTree temp=new ParsingTree();
+						temp.setAction(null);
+						tree.setRight(temp);
+						if(eqt.charAt(index)=='^'){ // power
+							tree.setAction(new Power());
+							if(eqt.charAt(first)=='z')
+								tree.setVal(false);
+							else{
+								tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+								tree.setVal(true);
+							}
+							index++;
+							thirdLevel(tree.getRight(),eqt);
+						}
+						else{ // sin or cos
+							if(eqt.charAt(index)=='s'){//sin
+								tree.setAction(new Sinus());
+								if( eqt.charAt(first)=='z')
+									tree.setVal(false);
+								else{
+									tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+									tree.setVal(true);
+								}
+								index++;
+								thirdLevel(tree.getRight(),eqt);
+							}
+							else{
+								tree.setAction(new Cosinus());
+								if( eqt.charAt(first)=='z')
+									tree.setVal(false);
+								else{
+									tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
+									tree.setVal(true);
+								}
+								index++;
+								thirdLevel(tree.getRight(),eqt);
+							}
+						}
+					}
+		
+	}
+}

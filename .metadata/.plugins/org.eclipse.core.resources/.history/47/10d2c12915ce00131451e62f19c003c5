@@ -1,0 +1,18 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class test {
+	public static void main(String[] args) {
+		String st="5+3*5+4";
+		ParsingTree t=Parser.createTree(st);
+		
+			System.out.println(TreeCalc.calc(t));
+	}
+
+}

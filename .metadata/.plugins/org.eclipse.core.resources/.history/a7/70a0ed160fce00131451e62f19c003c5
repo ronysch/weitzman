@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class Power extends Action {
+	public Complex perform(Complex base, double d){
+		return base.power(d);
+	}
+
+}

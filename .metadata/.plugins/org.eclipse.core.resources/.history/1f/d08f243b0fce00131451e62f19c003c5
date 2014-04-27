@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class Cosinus extends Action {
+	public Complex perform(Complex c1) {
+		return c1.cos();//the cos method returns new complex obj, so the original params didnt changed
+		
+	}
+}

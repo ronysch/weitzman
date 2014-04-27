@@ -1,0 +1,27 @@
+/**
+ * 
+ */
+package fractalsWeitzman;
+
+/**
+ * @author פרינץ
+ *
+ */
+public class Parser {
+	private static int index=0;
+	
+	public static ParsingTree createTree(String eqt){
+		ParsingTree tree=new ParsingTree();
+		return tree;
+		
+	}
+
+	private static ParsingTree firstLevel(ParsingTree tree,String eqt){
+		int first=index;
+		while(eqt.charAt(index)<58 && eqt.charAt(index)>47 && eqt.charAt(index)==46){
+			index++;
+			
+		}
+		return tree;
+	}
+}
