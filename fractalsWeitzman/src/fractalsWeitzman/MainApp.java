@@ -23,7 +23,7 @@ public class MainApp {
 
 	private JFrame frame;
 	private final Action action = new SwingAction();
-	private JTextField txtFff;
+	private static JTextField txtFff;
 	
 	/**
 	 * Launch the application.
