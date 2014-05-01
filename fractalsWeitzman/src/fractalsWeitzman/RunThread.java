@@ -30,13 +30,13 @@ public class RunThread implements Runnable {
 		 		}
 		 		else
 		 			fractal.iteDrawer(this.threadSerial);
-	            Thread.sleep(50);
+	            Thread.sleep(1);
 	         
 	     } catch (InterruptedException e) {
 	         System.out.println("Thread " + " interrupted.");
 	     }
 	      running=false;
-	    System.out.println("end");
+	   
 	   }
 	   
 	  

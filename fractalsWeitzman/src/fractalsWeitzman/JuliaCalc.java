@@ -1,22 +1,18 @@
-/**
- * 
- */
 package fractalsWeitzman;
 
-/**
- * @author user
- *
- */
-public class MandelCalc extends FractalCalc {
+public class JuliaCalc extends FractalCalc {
+	private Complex cons;
 
-	public MandelCalc(int width, int height, int iterations, double d , boolean isRoot) {
-		super(width, height, iterations,2.0,isRoot);
+	public JuliaCalc(int width, int height, int iterations, double stopIf,
+			boolean isRoot,Complex cons) {
+		
+		super(width, height, iterations, stopIf, isRoot);
+		this.cons=new Complex(cons);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public Complex[][] drawRoot(){
 		this.results=new Complex[this.height][this.width];
-		
 		this.start();
 		return this.results;
 	}
@@ -37,7 +33,7 @@ public class MandelCalc extends FractalCalc {
 				
 			
 				while(c.abs()<this.stopIf){
-					c=z.plus(c.times(c));
+					c=cons.plus(c.times(c));
 					count++;
 				}
 				this.results[i][j]=new Complex(c);
@@ -46,6 +42,7 @@ public class MandelCalc extends FractalCalc {
 		
 	}
 	public void iteDrawer(int index){
+		
 		index%=7;//ensure that pices of the threads wont last
 		for(int i=0;i<height;i++)
 			for(int j=index;j<width;j+=7)
@@ -55,8 +52,9 @@ public class MandelCalc extends FractalCalc {
 				double abs=0;
 				Complex z=new Complex(this.startX+(j*this.zoomX),this.startY-(i*this.zoomY)),c=new Complex(z);
 				
-				while((count<this.iterations)&& (abs<2)){
-					c=z.plus(c.times(c));
+				while((count<this.iterations)&& (abs<Details.getStopIf())){
+					
+					c=cons.plus(c.times(c));
 					count++;
 					abs=c.abs();
 					
@@ -75,11 +73,11 @@ public class MandelCalc extends FractalCalc {
 		for(int i=0;i<threads.length;i++)
 			threads[i]=new Thread(new RunThread(this)); 
 	
-		for(int i=0;i<7;i++)
+		for(int i=0;i<threads.length;i++)
 			threads[i].start();
 		
 		
-			 for(int i=0;i<7;i++)
+			 for(int i=0;i<threads.length;i++)
 				try {
 					threads[i].join();
 				} catch (InterruptedException e) {
@@ -93,4 +91,8 @@ public class MandelCalc extends FractalCalc {
 					//threads[i].destroy();;
 		
 	}
+	public void setCons(Complex cons) {
+		this.cons = cons;
+	}
+
 }

@@ -79,14 +79,15 @@ public class Parser {
 				ParsingTree son=new ParsingTree();
 				tree.setLeft(son);
 				secondLevel(son,eqt);
-				if(index==eqt.length()){
-					
+				if(index>=eqt.length()){
+					temp.setVal(true);
 					temp.setLeftVal(0.0);
 					
 				}
 				else
 					firstLevel(tree.getRight(),eqt);
 			}
+		System.out.println(1);
 	}
 
 	/**
@@ -161,21 +162,22 @@ public class Parser {
 		 */
 				else{
 					ParsingTree temp=new ParsingTree();
-					temp.setAction(null);
+					temp.setAction(new Multiplying());
 					tree.setRight(temp);
 					index=first;
 					tree.setAction(new Multiplying()); 
 					ParsingTree son=new ParsingTree();
 					tree.setLeft(son);
 					thirdLevel(son,eqt);
-					if(index==eqt.length()){
-						
+					if(index>=eqt.length()){
+						temp.setVal(true);
 						temp.setLeftVal(1.0);
 						tree.setRight(temp);
 					}
 					else
 						if(index>0){
 						if( eqt.charAt(index-1)=='+'||eqt.charAt(index-1)=='-'){
+							temp.setVal(true);
 							temp.setLeftVal(1.0);
 							tree.setRight(temp);
 						}
@@ -209,7 +211,7 @@ public class Parser {
 			tree.setLeftVal(Double.parseDouble(eqt.substring(first, index-1)));
 			}
 		}
-		else
+		else{
 		/*
 		 * checks if the next operator is + or -
 		 */
@@ -281,6 +283,6 @@ public class Parser {
 							}
 						}
 					}
-		
+		}
 	}
 }

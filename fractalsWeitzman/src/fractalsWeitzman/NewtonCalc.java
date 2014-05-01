@@ -1,17 +1,13 @@
-/**
- * 
- */
 package fractalsWeitzman;
 
-/**
- * @author user
- *
- */
-public class MandelCalc extends FractalCalc {
-
-	public MandelCalc(int width, int height, int iterations, double d , boolean isRoot) {
+public class NewtonCalc extends FractalCalc {
+	private ParsingTree func;
+	private ParsingTree deriv;
+	
+	public NewtonCalc(int width, int height, int iterations, double d , boolean isRoot,ParsingTree func,ParsingTree deriv) {
 		super(width, height, iterations,2.0,isRoot);
-		// TODO Auto-generated constructor stub
+		this.func=func;
+		this.deriv=deriv;
 	}
 
 	public Complex[][] drawRoot(){
@@ -27,17 +23,20 @@ public class MandelCalc extends FractalCalc {
 	}
 	
 	public void rootDrawer(int index){
+		System.out.println("start");
 		index%=7;//ensure that pices of the threads wont last
-		
+		TreeCalc fu=new TreeCalc(null),de=new TreeCalc(null);
 		for(int i=0;i<height;i++)
 			for(int j=index;j<width;j+=7)
 			{
 				int count=0;
 				Complex z=new Complex(this.startX+(j*(this.width*this.zoomX)),this.startY-(i*(this.height*this.zoomY))),c=new Complex(z);
-				
-			
-				while(c.abs()<this.stopIf){
-					c=z.plus(c.times(c));
+				fu.setCom(c);
+				de.setCom(c);
+				while(c.abs()>Details.getStopIf()){
+					c=c.minus(fu.calc(func).divides(de.calc(deriv)));
+					fu.setCom(c);
+					de.setCom(c);
 					count++;
 				}
 				this.results[i][j]=new Complex(c);
@@ -46,7 +45,10 @@ public class MandelCalc extends FractalCalc {
 		
 	}
 	public void iteDrawer(int index){
+		if(func!=null)
+		System.out.println("working");
 		index%=7;//ensure that pices of the threads wont last
+		TreeCalc fu=new TreeCalc(null),de=new TreeCalc(null);
 		for(int i=0;i<height;i++)
 			for(int j=index;j<width;j+=7)
 			{
@@ -54,12 +56,15 @@ public class MandelCalc extends FractalCalc {
 				int count=0;
 				double abs=0;
 				Complex z=new Complex(this.startX+(j*this.zoomX),this.startY-(i*this.zoomY)),c=new Complex(z);
-				
-				while((count<this.iterations)&& (abs<2)){
-					c=z.plus(c.times(c));
-					count++;
+				fu.setCom(c);
+				de.setCom(c);
+				abs=z.abs();
+				while((count<this.iterations)&& (abs>Details.getStopIf())){
+					c=c.minus(fu.calc(func).divides(de.calc(deriv)));
+					fu.setCom(c);
+					de.setCom(c);
 					abs=c.abs();
-					
+					System.out.println(c.re());
 				}
 				this.countResults[i][j]=count;
 				
@@ -89,8 +94,8 @@ public class MandelCalc extends FractalCalc {
 			 
 		 }
 			 
-			// for(int i=0;i<7;i++)
-					//threads[i].destroy();;
+			
 		
 	}
+
 }

@@ -9,7 +9,7 @@ package fractalsWeitzman;
  */
 public abstract class FractalCalc {
 	protected double zoomX,zoomY; //the zoom of the image
-	protected double startX,startY; // the details of the corner
+	protected double startX,startY,endX,endY; // the details of the corner
 	protected int width,height; // the result matrix sizes
 	protected int iterations; // how many iterations 
 	protected double stopIf; //the if
@@ -18,15 +18,18 @@ public abstract class FractalCalc {
 	protected int[][] countResults; //for the iterations mode
 	public FractalCalc( int width,int height, int iterations, double stopIf,boolean isRoot) {
 		super();
-		this.startX = -2.0;
-		this.startY = 1.6;
-		this.zoomX= (Math.abs(startX*2))/width;
-		this.zoomY = (startY*2)/height;
+		this.startX =Details.getStartX();
+		this.startY = Details.getStartY();
+		this.endX =Details.getEndX();
+		this.endY = Details.getEndY();
+		this.zoomX= (Math.abs(endX-startX))/width;
+		this.zoomY = (Math.abs(endY-startY))/height;
 		this.width = width;
 		this.height = height;
 		this.iterations = iterations;
 		this.stopIf = stopIf;
 		this.isRoot=isRoot;
+		System.out.println(startX);
 	}
 	public double getStartX() {
 		return startX;
@@ -41,10 +44,16 @@ public abstract class FractalCalc {
 		this.startY = startY;
 	}
 	public void closer() {
-		this.zoomX = (zoomX*4)/3;
-		this.zoomY = (zoomY*4)/3;
-		this.startX+=(this.width/2)*this.width/(this.zoomX);
-		this.startY+=(this.width/2)*this.height/(this.zoomY);
+		
+	
+		this.startX*=0.75;
+		this.startY*=0.75;
+		this.endX*=0.75;
+		this.endY*=0.75;
+		Details.setStartX(this.startX);
+		Details.setStartY(this.startY);
+		Details.setEndX(this.endX);
+		Details.setEndY(this.endY);
 	}
 	public void setIterations(int iterations) {
 		this.iterations = iterations;

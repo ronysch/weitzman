@@ -1,17 +1,14 @@
-/**
- * 
- */
 package fractalsWeitzman;
 
-/**
- * @author user
- *
- */
-public class MandelCalc extends FractalCalc {
+public class FreeCalc extends FractalCalc {
 
-	public MandelCalc(int width, int height, int iterations, double d , boolean isRoot) {
+	private ParsingTree exp;
+	
+	
+	public FreeCalc(int width, int height, int iterations, double d , boolean isRoot,ParsingTree exp) {
 		super(width, height, iterations,2.0,isRoot);
-		// TODO Auto-generated constructor stub
+		this.exp=exp;
+		
 	}
 
 	public Complex[][] drawRoot(){
@@ -28,16 +25,17 @@ public class MandelCalc extends FractalCalc {
 	
 	public void rootDrawer(int index){
 		index%=7;//ensure that pices of the threads wont last
-		
+		TreeCalc expr=new TreeCalc(null);
 		for(int i=0;i<height;i++)
 			for(int j=index;j<width;j+=7)
 			{
 				int count=0;
 				Complex z=new Complex(this.startX+(j*(this.width*this.zoomX)),this.startY-(i*(this.height*this.zoomY))),c=new Complex(z);
-				
-			
-				while(c.abs()<this.stopIf){
-					c=z.plus(c.times(c));
+				expr.setCom(c);
+				while(c.abs()>Details.getStopIf()){
+					c=expr.calc(exp);
+					
+					expr.setCom(c);
 					count++;
 				}
 				this.results[i][j]=new Complex(c);
@@ -47,6 +45,7 @@ public class MandelCalc extends FractalCalc {
 	}
 	public void iteDrawer(int index){
 		index%=7;//ensure that pices of the threads wont last
+		TreeCalc expr=new TreeCalc(null);
 		for(int i=0;i<height;i++)
 			for(int j=index;j<width;j+=7)
 			{
@@ -54,10 +53,10 @@ public class MandelCalc extends FractalCalc {
 				int count=0;
 				double abs=0;
 				Complex z=new Complex(this.startX+(j*this.zoomX),this.startY-(i*this.zoomY)),c=new Complex(z);
-				
-				while((count<this.iterations)&& (abs<2)){
-					c=z.plus(c.times(c));
-					count++;
+				expr.setCom(c);
+				while((count<this.iterations)&& (abs>Details.getStopIf())){
+					c=expr.calc(exp);
+					expr.setCom(c);
 					abs=c.abs();
 					
 				}
@@ -89,8 +88,9 @@ public class MandelCalc extends FractalCalc {
 			 
 		 }
 			 
-			// for(int i=0;i<7;i++)
-					//threads[i].destroy();;
+			
 		
 	}
+
+
 }
